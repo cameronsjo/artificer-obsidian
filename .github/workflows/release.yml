@@ -1,0 +1,64 @@
+name: Release theme
+
+# Fires on a bare-semver tag (X.Y.Z) that MUST equal manifest.json's version —
+# the Obsidian community picker's hard requirement. No trailing '*': a
+# prerelease/typo tag (0.19.0-rc1) never triggers a release.
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write   # gh release create — nothing more (no OIDC on this path)
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify tag matches manifest version
+        env:
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if ! [[ "$REF_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Tag '$REF_NAME' is not a bare semver X.Y.Z."
+            exit 1
+          fi
+          manifest_version=$(jq -r .version manifest.json)
+          if ! [[ "$manifest_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::manifest.json version '$manifest_version' is not a bare semver."
+            exit 1
+          fi
+          if [ "$REF_NAME" != "$manifest_version" ]; then
+            echo "::error::Tag is $REF_NAME but manifest.json has version $manifest_version."
+            exit 1
+          fi
+          echo "VERSION=$manifest_version" >> "$GITHUB_ENV"
+
+      - name: Create release with theme assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          sha=$(sha256sum theme.css | cut -d' ' -f1)
+          {
+            echo "Artificer theme for Obsidian, version ${VERSION}."
+            echo
+            echo "**Install via BRAT:** add the beta theme \`cameronsjo/artificer-obsidian\`, or download"
+            echo "\`theme.css\` + \`manifest.json\` into \`<vault>/.obsidian/themes/Artificer/\`."
+            echo
+            echo "Release assets are mutable and carry no build provenance; verify integrity:"
+            echo
+            echo "\`\`\`"
+            echo "theme.css  sha256  ${sha}"
+            echo "\`\`\`"
+          } > release-notes.md
+          gh release create "$REF_NAME" \
+            --title "$VERSION" \
+            --notes-file release-notes.md \
+            manifest.json \
+            theme.css
