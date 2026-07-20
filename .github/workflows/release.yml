@@ -1,13 +1,13 @@
 name: Release theme
 
-# Fires on a bare-semver tag (X.Y.Z) that MUST equal manifest.json's version —
-# the Obsidian community picker's hard requirement. No trailing '*': a
-# prerelease/typo tag (0.19.0-rc1) never triggers a release.
+# Fires on any dotted X.Y.Z-shaped tag; the in-job bare-semver regex is the real
+# gate (it MUST equal manifest.json's version — the community picker's hard
+# requirement). A prerelease/typo tag runs, fails the check, cuts no release.
 
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+      - '*.*.*'
 
 permissions:
   contents: write   # gh release create — nothing more (no OIDC on this path)
