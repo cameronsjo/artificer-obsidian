@@ -28,7 +28,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.tag || github.ref_name }}
+          # Fully qualify as refs/tags/ — an unqualified ref name resolves a
+          # same-named branch first, which would check out (and release) the
+          # wrong commit. Push events keep the exact triggering commit.
+          ref: ${{ inputs.tag && format('refs/tags/{0}', inputs.tag) || github.sha }}
 
       - name: Verify tag matches manifest version
         env:
@@ -70,6 +73,7 @@ jobs:
             echo "\`\`\`"
           } > release-notes.md
           gh release create "$REF_NAME" \
+            --verify-tag \
             --title "$VERSION" \
             --notes-file release-notes.md \
             manifest.json \
