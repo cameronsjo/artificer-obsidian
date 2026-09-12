@@ -3,11 +3,21 @@ name: Release theme
 # Fires on any dotted X.Y.Z-shaped tag; the in-job bare-semver regex is the real
 # gate (it MUST equal manifest.json's version — the community picker's hard
 # requirement). A prerelease/typo tag runs, fails the check, cuts no release.
+#
+# workflow_dispatch is a manual-retry escape hatch for an EXISTING tag whose
+# push-triggered run never started (e.g. a GitHub Actions outage) — it never
+# creates or moves a tag. The `tag` input must name a tag that already exists.
 
 on:
   push:
     tags:
       - '*.*.*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to release (e.g. 0.19.0). Must already exist — this does not create or move tags."
+        required: true
+        type: string
 
 permissions:
   contents: write   # gh release create — nothing more (no OIDC on this path)
@@ -17,10 +27,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref_name }}
 
       - name: Verify tag matches manifest version
         env:
-          REF_NAME: ${{ github.ref_name }}
+          REF_NAME: ${{ inputs.tag || github.ref_name }}
         run: |
           set -euo pipefail
           if ! [[ "$REF_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -41,7 +53,7 @@ jobs:
       - name: Create release with theme assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REF_NAME: ${{ github.ref_name }}
+          REF_NAME: ${{ inputs.tag || github.ref_name }}
         run: |
           set -euo pipefail
           sha=$(sha256sum theme.css | cut -d' ' -f1)
