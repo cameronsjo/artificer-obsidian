@@ -48,4 +48,4 @@ The theme is **MIT** — see [LICENSE](LICENSE). Bundled fonts keep their own OF
 
 ---
 
-Artificer v0.19.0 · part of Cameron's personal design system.
+Artificer v0.27.0 · part of Cameron's personal design system.

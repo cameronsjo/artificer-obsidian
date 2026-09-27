@@ -3,7 +3,7 @@
 User-visible changes to the Artificer Obsidian theme, distributed via BRAT and
 GitHub releases. The theme tracks the Artificer system version.
 
-## 0.19.0
+## 0.27.0
 
 First public release of the Artificer Obsidian theme.
 
