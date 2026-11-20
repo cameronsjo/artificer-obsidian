@@ -7,13 +7,13 @@ inlining them for redistribution carries the obligation to ship the license and
 each face's copyright + reserved font name. Both are reproduced below.
 
 The `font-family` names in the CSS are unchanged (`JetBrains Mono`,
-`iA Writer Quattro`), so the reserved font names are honored — this is a
+`Bricolage Grotesque`), so the reserved font names are honored — this is a
 redistribution, not a modified derivative renaming the faces.
 
 | Face | Version | Role |
 |---|---|---|
 | **JetBrains Mono** | 2.304 | Chrome, code, identifiers, headings (default) |
-| **iA Writer Quattro** | 2.000 | Editor body prose (default) |
+| **Bricolage Grotesque** | 1.001 | Editor body prose (default) |
 
 ---
 
@@ -23,10 +23,10 @@ Copyright 2020 The JetBrains Mono Project Authors
 (https://github.com/JetBrains/JetBrainsMono), with Reserved Font Name
 "JetBrains Mono".
 
-## iA Writer Quattro
+## Bricolage Grotesque
 
-Copyright 2017 IBM Corp. and iA Inc., with Reserved Font Name "iA Writer"
-and "Plex" (iA Writer Quattro derives from IBM Plex).
+Copyright 2022 The Bricolage Grotesque Project Authors
+(https://github.com/ateliertriay/bricolage). No Reserved Font Name.
 
 ---
 

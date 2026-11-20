@@ -38,7 +38,7 @@ Style Settings everything still works — you just get the defaults.
 
 ## Fonts
 
-`theme.css` bundles **JetBrains Mono** and **iA Writer Quattro**, both under the
+`theme.css` bundles **JetBrains Mono** and **Bricolage Grotesque**, both under the
 SIL Open Font License 1.1. Full license texts and copyrights: [FONTS.md](FONTS.md).
 
 ## License
@@ -48,4 +48,4 @@ The theme is **MIT** — see [LICENSE](LICENSE). Bundled fonts keep their own OF
 
 ---
 
-Artificer v0.27.0 · part of Cameron's personal design system.
+Artificer v0.28.0 · part of Cameron's personal design system.
